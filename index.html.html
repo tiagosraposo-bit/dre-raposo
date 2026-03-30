@@ -97,6 +97,53 @@ td.clk{cursor:pointer;}td.clk:hover{background:var(--sf2)!important;}
 </style>
 </head>
 <body>
+
+<style id="auth-style">
+#auth-screen{position:fixed;inset:0;background:#F4F1EC;z-index:9999;display:flex;align-items:center;justify-content:center;}
+.auth-box{background:#fff;border:1px solid rgba(0,0,0,0.07);border-radius:16px;padding:40px 44px;width:340px;box-shadow:0 8px 40px rgba(0,0,0,0.08);}
+.auth-logo{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:4px;}
+.auth-sub{font-size:12px;color:#A8A098;margin-bottom:28px;font-family:'DM Mono',monospace;}
+.auth-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:#A8A098;font-weight:500;margin-bottom:6px;}
+.auth-input{width:100%;padding:10px 13px;border:1px solid rgba(0,0,0,0.12);border-radius:8px;font-size:14px;font-family:'DM Mono',monospace;outline:none;background:#fff;letter-spacing:.1em;}
+.auth-input:focus{border-color:#1A1714;}
+.auth-btn{width:100%;margin-top:14px;padding:11px;background:#1A1714;color:#fff;border:none;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:opacity .15s;}
+.auth-btn:hover{opacity:.85;}
+.auth-err{font-size:11.5px;color:#B83226;margin-top:10px;display:none;font-family:'DM Mono',monospace;}
+</style>
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">DRE Familiar</div>
+    <div class="auth-sub">Tiago &amp; Laura · acesso restrito</div>
+    <div class="auth-label">Senha</div>
+    <input class="auth-input" id="auth-input" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')authCheck()">
+    <button class="auth-btn" onclick="authCheck()">Entrar</button>
+    <div class="auth-err" id="auth-err">Senha incorreta</div>
+  </div>
+</div>
+<script>
+(function(){
+  // Verificar se já autenticado nesta sessão
+  if(sessionStorage.getItem('dre_auth')==='ok'){
+    document.getElementById('auth-screen').style.display='none';
+  }
+})();
+function authCheck(){
+  const v=document.getElementById('auth-input').value;
+  // Hash simples — substitua 'SENHA_AQUI' pela senha desejada
+  if(v===atob('cmFwb3NvMjY=')){
+    sessionStorage.setItem('dre_auth','ok');
+    const s=document.getElementById('auth-screen');
+    s.style.transition='opacity .3s';s.style.opacity='0';
+    setTimeout(()=>s.remove(),300);
+    const st=document.getElementById('auth-style');if(st)st.remove();
+  } else {
+    const e=document.getElementById('auth-err');
+    e.style.display='block';
+    document.getElementById('auth-input').value='';
+    document.getElementById('auth-input').focus();
+  }
+}
+</script>
 <div class="shell">
 <aside class="sb">
   <div class="logo">DRE Familiar</div>
